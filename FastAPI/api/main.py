@@ -1,17 +1,8 @@
 from fastapi import FastAPI 
-from pydantic import BaseModel
+from .database import engine, sessionLocal
+from . import models
 
-class Article(BaseModel):
-    id: int
-    title: str
-    description: str
+models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-@app.get('/articles/{id}')
-def get_artile(id:int):
-    return{'article':{id}}
-
-@app.post('/artcle/')
-def add_article(article: Article):
-    return article 
