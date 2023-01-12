@@ -6,5 +6,6 @@ class Article(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String(100))
     description = Column(String(400))
+    text = Column(String(5000))
     
     
