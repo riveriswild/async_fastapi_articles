@@ -22,7 +22,8 @@ def get_article(db:Session = Depends(get_db)):
 
 @app.get('/articles/{id}', status_code=status.HTTP_200_OK, response_model = MyArticleSchema)
 def article_details(id:int, db:Session = Depends(get_db)):
-    article_details = db.query(models.Article).filter(models.Article.id == id).first()
+    # article_details = db.query(models.Article).filter(models.Article.id == id).first()
+    article_details = db.query(models.Article).get(id)
     if article_details:
         return article_details
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'The article with id {id} does not exist')
@@ -35,3 +36,8 @@ def add_article(article:ArticleSchema, db:Session = Depends(get_db)):
     db.commit()
     db.refresh(new_article)
     return new_article
+
+@app.put('/articles/{id}', status_code=status.HTTP_202_ACCEPTED)
+def update_article(id:int, article:ArticleSchema, db:Session = Depends(get_db)):
+    db.query(models.Article).filter(models.Article.id == id).update({'title':article.title, 'description':article.description})
+    return {'message': "The article has been updated"}
