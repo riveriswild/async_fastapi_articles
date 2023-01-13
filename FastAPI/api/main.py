@@ -1,4 +1,4 @@
-from fastapi import Depends, FastAPI 
+from fastapi import Depends, FastAPI, status
 from .database import engine, sessionLocal
 from . import models
 from .schemas import ArticleSchema
@@ -15,7 +15,7 @@ def get_db():
         db.close()
         
 
-@app.post('/articles/')
+@app.post('/articles/', status_code=status.HTTP_201_CREATED )
 def add_article(article:ArticleSchema, db:Session = Depends(get_db)):
     new_article = models.Article(title=article.title, description=article.description)
     db.add(new_article)

@@ -3,7 +3,7 @@ from pydantic import BaseModel
 
 
 class ArticleSchema(BaseModel):
-    id:int
+    # id:int
     title:str
     description:str
     
