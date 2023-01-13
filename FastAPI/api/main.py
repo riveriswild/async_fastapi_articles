@@ -1,5 +1,5 @@
 from typing import List
-from fastapi import Depends, FastAPI, status
+from fastapi import Depends, FastAPI, status, HTTPException
 from .database import engine, sessionLocal
 from . import models
 from .schemas import ArticleSchema, MyArticleSchema
@@ -19,6 +19,14 @@ def get_db():
 def get_article(db:Session = Depends(get_db)):
     all_articles = db.query(models.Article).all()
     return all_articles 
+
+@app.get('/articles/{id}', status_code=status.HTTP_200_OK, response_model = MyArticleSchema)
+def article_details(id:int, db:Session = Depends(get_db)):
+    article_details = db.query(models.Article).filter(models.Article.id == id).first()
+    if article_details:
+        return article_details
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'The article with id {id} does not exist')
+    
 
 @app.post('/articles/', status_code=status.HTTP_201_CREATED )
 def add_article(article:ArticleSchema, db:Session = Depends(get_db)):
