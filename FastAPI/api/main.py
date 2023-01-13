@@ -41,3 +41,9 @@ def add_article(article:ArticleSchema, db:Session = Depends(get_db)):
 def update_article(id:int, article:ArticleSchema, db:Session = Depends(get_db)):
     db.query(models.Article).filter(models.Article.id == id).update({'title':article.title, 'description':article.description})
     return {'message': "The article has been updated"}
+
+@app.delete('/articles/{id}', status_code=status.HTTP_204_NO_CONTENT)
+def delete_article(id:int, db:Session = Depends(get_db)):
+    db.query(models.Article).filter(models.Article.id == id).delete(synchronize_session=False)
+    db.commit()
+    
