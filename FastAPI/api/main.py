@@ -1,4 +1,4 @@
-from fastapi import FastAPI, status
+from fastapi import FastAPI, HTTPException, status
 
 from .schemas import ArticleSchema, IdArticleSchema
 from .db import metadata, database, engine, Article
@@ -26,3 +26,12 @@ async def insert_article(article:ArticleSchema):
 async def get_articles():
     query = Article.select()
     return await database.fetch_all(query=query)
+
+@app.get('/articles/{id}', response_model=ArticleSchema)
+async def get_details(id:int):
+    query = Article.select().where(id==Article.c.id)
+    article_det = await database.fetch_one(query=query)
+    
+    if not article_det:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Not found')
+    return {**article_det}
