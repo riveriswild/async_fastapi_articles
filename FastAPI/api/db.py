@@ -2,7 +2,7 @@ from databases import Database
 from sqlalchemy import Column, Integer, MetaData, String, Table, create_engine
 
 
-SQLALCHEMY_DATABASE_URL = "mysql://river@localhost/async_fastapi"
+SQLALCHEMY_DATABASE_URL = "mysql://river:nv01@localhost/async_fastapi"
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 metadata = MetaData()
