@@ -41,3 +41,9 @@ async def update_article(id:int, article:ArticleSchema):
     query = Article.update().where(id==Article.c.id).values(title=article.title, description=article.description)
     await database.execute(query)
     return {**article.dict(), "id": id}
+
+@app.delete('/articles/{id}', status_code=status.HTTP_204_NO_CONTENT)
+async def delete_article(id:int):
+    query = Article.delete().where(id==Article.c.id)
+    await database.execute(query)
+    # return {"message": "Article deleted"}
