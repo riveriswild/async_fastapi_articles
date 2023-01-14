@@ -35,3 +35,9 @@ async def get_details(id:int):
     if not article_det:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Not found')
     return {**article_det}
+
+@app.put('/articles/{id}', response_model=IdArticleSchema)
+async def update_article(id:int, article:ArticleSchema):
+    query = Article.update().where(id==Article.c.id).values(title=article.title, description=article.description)
+    await database.execute(query)
+    return {**article.dict(), "id": id}
