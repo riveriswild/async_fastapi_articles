@@ -1,8 +1,12 @@
+import os
+from dotenv import load_dotenv
 from databases import Database
 from sqlalchemy import Column, Integer, MetaData, String, Table, create_engine
 
 
-SQLALCHEMY_DATABASE_URL = "mysql://river:nv01@localhost/async_fastapi"
+load_dotenv()
+
+SQLALCHEMY_DATABASE_URL = os.getenv('SQLALCHEMY_DATABASE_URL')
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 metadata = MetaData()
