@@ -1,6 +1,6 @@
 from fastapi import FastAPI, status
 
-from .schemas import ArticleSchema
+from .schemas import ArticleSchema, IdArticleSchema
 from .db import metadata, database, engine, Article
 
 
@@ -15,7 +15,7 @@ async def startup():
 async def shutdown():
     await database.disconnect()
     
-@app.post('/articles/', status_code=status.HTTP_201_CREATED )
+@app.post('/articles/', status_code=status.HTTP_201_CREATED, response_model=IdArticleSchema)
 async def insert_article(article:ArticleSchema):
     query = Article.insert().values(title=article.title, description=article.description)
     last_record_id = await database.execute(query)
